@@ -1,0 +1,74 @@
+<div class="chat-container">
+  <mat-card class="chat-card">
+    <mat-card-header>
+      <mat-card-title>
+        <span *ngIf="(selectedAgent$ | async) as agent; else noAgent">
+          Chat with {{ agent.name }}
+        </span>
+        <ng-template #noAgent>
+          Select an agent to start chatting
+        </ng-template>
+      </mat-card-title>
+      <mat-card-subtitle *ngIf="(selectedAgent$ | async)?.description">
+        {{ (selectedAgent$ | async)?.description }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="messages-container" #chatContainer>
+        <div *ngFor="let message of messages" class="message-row"
+             [ngClass]="{
+               'user-row': message.isUserMessage,
+               'bot-row': !message.isUserMessage
+             }">
+          <div class="message"
+               [ngClass]="{
+                 'user-message': message.isUserMessage,
+                 'bot-message': !message.isUserMessage,
+                 'error': message.status === 'error'
+               }">
+            <div class="message-content">
+              <!-- User messages remain as plain text -->
+              <p *ngIf="message.isUserMessage">{{ message.content }}</p>
+              <!-- Bot messages get rendered as HTML -->
+              <p *ngIf="!message.isUserMessage" [innerHTML]="message.content | markdown"></p>
+              <div *ngIf="message.status === 'sending'" class="loading-indicator">
+                <mat-spinner diameter="20"></mat-spinner>
+              </div>
+            </div>
+            <div class="message-time">
+              {{ message.timestamp | date:'shortTime' }}
+            </div>
+          </div>
+          <mat-icon *ngIf="!message.isUserMessage" class="robot-icon">smart_toy</mat-icon>
+        </div>
+
+        <div *ngIf="messages.length === 0" class="empty-state">
+          <p *ngIf="selectedAgent$ | async; else selectAgentPrompt">
+            Start a conversation by typing a message below.
+          </p>
+          <ng-template #selectAgentPrompt>
+            <p>Please select an agent to begin chatting.</p>
+          </ng-template>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <div class="input-container">
+        <mat-form-field appearance="outline" class="message-input">
+          <input matInput type="text" 
+                 placeholder="Type a message" 
+                 [(ngModel)]="newMessage"
+                 [disabled]="!(selectedAgent$ | async) || isSending"
+                 (keydown)="onKeyPress($event)">
+        </mat-form-field>
+        <button mat-mini-fab color="primary" 
+                [disabled]="!newMessage.trim() || !(selectedAgent$ | async) || isSending"
+                (click)="sendMessage()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>

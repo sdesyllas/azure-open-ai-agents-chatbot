@@ -1,0 +1,39 @@
+.app-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100vh;
+  background-color: #f8f9fa;
+  overflow: hidden; /* Prevent scrollbars on the main container */
+}
+
+.header {
+  background-color: #0078d4;
+  color: white;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0; /* Don't allow the header to shrink */
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.header-right {
+  flex: 0 0 auto;
+  width: 300px; /* Adjust width as needed */
+}
+
+.main-content {
+  flex: 1;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden; /* Prevent scrollbars in the main content area */
+  height: calc(100vh - 64px); /* Adjust based on header height */
+}

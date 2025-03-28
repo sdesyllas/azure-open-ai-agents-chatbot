@@ -1,0 +1,57 @@
+@use '@angular/material' as mat;
+
+/* You can add global styles to this file, and also import other style files */
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+// Angular Material overrides
+.mat-mdc-card {
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+// Custom helper classes
+.full-width {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-2 {
+  margin-top: 16px;
+}
+
+.mb-2 {
+  margin-bottom: 16px;
+}
+
+// Custom scrollbar styling for a modern look
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
