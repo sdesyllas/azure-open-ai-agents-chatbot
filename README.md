@@ -2,7 +2,7 @@
 
 An interactive web application that allows users to chat with different Azure OpenAI Agents through a modern interface built with Angular.
 
-![image](https://github.com/user-attachments/assets/09ba6ea1-4dc0-4d20-8ed7-3aff76399dc2)
+![github-ai-chatbox](https://github.com/user-attachments/assets/794356fc-a9e3-4526-b8db-bf7939282c65)
 
 ## Overview
 
