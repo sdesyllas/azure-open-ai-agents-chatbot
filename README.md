@@ -2,6 +2,8 @@
 
 An interactive web application that allows users to chat with different Azure OpenAI Agents through a modern interface built with Angular.
 
+![image](https://github.com/user-attachments/assets/09ba6ea1-4dc0-4d20-8ed7-3aff76399dc2)
+
 ## Overview
 
 This project demonstrates how to integrate Azure OpenAI Agents into a web application. It allows users to:
