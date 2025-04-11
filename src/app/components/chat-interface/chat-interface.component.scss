@@ -1,17 +1,20 @@
 .chat-container {
   padding: 10px;
-  width: 80%; /* Changed from 100% to 80% */
+  width: 80%;
   height: 100%;
-  margin: 0 auto; /* This will center the container */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .chat-card {
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  height: calc(100vh - 120px); /* Increased height to fill available space */
+  height: calc(100vh - 140px); /* Adjusted to account for the footer */
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Prevent content from spilling out */
+  overflow: hidden;
+  margin-bottom: 10px; /* Add margin at the bottom to create space between chat and footer */
 }
 
 .messages-container {
@@ -44,7 +47,7 @@ mat-card-actions {
   display: flex;
   max-width: 80%;
   position: relative;
-  gap: 8px;
+  gap: 16px; /* Increased gap between message and icon */
   align-items: flex-start;
 }
 
@@ -63,15 +66,28 @@ mat-card-actions {
   position: relative;
 }
 
-.robot-icon {
-  margin-top: 8px;
-  color: #0078d4;
-  font-size: 20px;
-  height: 20px;
-  width: 20px;
+.robot-icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 36px; /* Add minimum width to prevent squeezing */
+  width: 36px; /* Increased from 32px */
+  height: 36px; /* Increased from 32px */
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0078d4, #00b7c3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-top: 4px;
+  flex-shrink: 0; /* Prevent container from shrinking */
 }
 
-body{
+.robot-icon {
+  color: white;
+  font-size: 22px; /* Slightly larger icon */
+  height: 22px;
+  width: 22px;
+}
+
+.message-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -79,12 +95,6 @@ body{
   p {
     margin: 0;
     word-break: break-word;
-  }
-  
-  img {
-    max-width: 100px;
-    max-height: 100px;
-    object-fit: contain;
   }
 }
 
@@ -137,4 +147,139 @@ body{
 
 .message-input {
   flex: 1;
+}
+
+/* File attachment styles */
+.file-attachment {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  padding: 6px 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  max-width: 100%;
+
+  mat-icon {
+    margin-right: 8px;
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    color: #555;
+  }
+
+  .file-name {
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
+}
+
+/* User message file attachment needs different colors */
+.user-message .file-attachment {
+  background-color: rgba(255, 255, 255, 0.2);
+
+  mat-icon {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .file-name {
+    color: white;
+  }
+}
+
+/* File upload button */
+.file-upload-button {
+  margin-right: 5px;
+}
+
+/* Selected file container */
+.selected-file-container {
+  padding: 0 16px 8px;
+  
+  .selected-file {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 16px;
+    max-width: fit-content;
+    
+    mat-icon {
+      margin-right: 8px;
+      color: #555;
+    }
+    
+    .file-name {
+      font-size: 0.85rem;
+      margin-right: 10px;
+    }
+  }
+}
+
+/* Recommended questions section */
+.recommended-questions-container {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  margin: 12px 0 12px 40px;
+  max-width: 70%;
+}
+
+.recommended-questions-title {
+  display: flex;
+  align-items: center;
+  color: #666;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+  
+  mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+    margin-right: 4px;
+  }
+}
+
+.recommended-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recommended-question {
+  text-align: left !important;
+  justify-content: flex-start !important;
+  white-space: normal;
+  line-height: 1.2;
+  height: auto;
+  padding: 8px 12px;
+  border-radius: 16px;
+  border-color: #e0e0e0;
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 0.9rem;
+  
+  ::ng-deep .mat-button-wrapper {
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+  
+  &:hover {
+    background-color: #f0f0f0;
+    border-color: #d0d0d0;
+  }
+}
+
+.recommended-questions-loading {
+  display: flex;
+  align-items: center;
+  margin: 12px 0 12px 40px;
+  color: #666;
+  font-size: 0.8rem;
+  
+  mat-spinner {
+    margin-right: 8px;
+  }
 }

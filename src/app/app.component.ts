@@ -11,5 +11,6 @@ import { ChatInterfaceComponent } from './components/chat-interface/chat-interfa
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Azure Open AI agent chatbot';
+  title = 'Azure Agentic Chat!';
+  currentYear = new Date().getFullYear();
 }

@@ -1,13 +1,13 @@
 {
-  "name": "azure-open-ai-agents-chatbot",
+  "name": "azure-ai-chat",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node dist/azure-ai-chat/server/server.mjs",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:azure-open-ai-agents-chatbot": "node dist/azure-open-ai-agents-chatbot/server/server.mjs"
+    "serve:ssr:azure-ai-chat": "node dist/azure-ai-chat/server/server.mjs"
   },
   "private": true,
   "dependencies": {
@@ -26,8 +26,10 @@
     "@azure/ai-projects": "^1.0.0-beta.3",
     "@azure/identity": "^4.8.0",
     "@types/marked": "^5.0.2",
+    "@types/multer": "^1.4.12",
     "express": "^4.18.2",
     "marked": "^15.0.7",
+    "multer": "^1.4.5-lts.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

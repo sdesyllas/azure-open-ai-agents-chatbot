@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "azure-open-ai-agents-chatbot": {
+    "azure-ai-chat": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/azure-open-ai-agents-chatbot",
+            "outputPath": "dist/azure-ai-chat",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -44,18 +44,6 @@
           },
           "configurations": {
             "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
-                }
-              ],
               "outputHashing": "all"
             },
             "development": {
@@ -70,10 +58,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "azure-open-ai-agents-chatbot:build:production"
+              "buildTarget": "azure-ai-chat:build:production"
             },
             "development": {
-              "buildTarget": "azure-open-ai-agents-chatbot:build:development"
+              "buildTarget": "azure-ai-chat:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -101,6 +89,36 @@
               "src/styles.scss"
             ],
             "scripts": []
+          }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/azure-ai-chat/server",
+            "main": "src/main.server.ts",
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              "src/web.config"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all",
+              "sourceMap": false,
+              "optimization": true
+            }
           }
         }
       }

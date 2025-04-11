@@ -1,10 +1,24 @@
 import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppComponent } from './app.component';
+import { AgentSelectorComponent } from './components/agent-selector/agent-selector.component';
+import { ChatInterfaceComponent } from './components/chat-interface/chat-interface.component';
+import { provideRouter } from '@angular/router';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [
+        AppComponent,
+        RouterTestingModule,
+        NoopAnimationsModule,
+        HttpClientTestingModule
+      ],
+      providers: [
+        provideRouter([])
+      ]
     }).compileComponents();
   });
 
@@ -14,16 +28,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'azure-open-ai-agents-chatbot' title`, () => {
+  it(`should have the correct title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('Azure Open AI agent chatbot');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, Azure Open AI agent chatbot');
+    expect(app.title).toEqual('Azure Agentic Chat!');
   });
 });

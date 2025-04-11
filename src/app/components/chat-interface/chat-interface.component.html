@@ -21,6 +21,11 @@
                'user-row': message.isUserMessage,
                'bot-row': !message.isUserMessage
              }">
+          <!-- For bot messages, show the robot icon first -->
+          <div *ngIf="!message.isUserMessage" class="robot-icon-container">
+            <mat-icon class="robot-icon">adb</mat-icon>
+          </div>
+          
           <div class="message"
                [ngClass]="{
                  'user-message': message.isUserMessage,
@@ -35,12 +40,38 @@
               <div *ngIf="message.status === 'sending'" class="loading-indicator">
                 <mat-spinner diameter="20"></mat-spinner>
               </div>
+              <!-- Display file attachment if present -->
+              <div class="file-attachment" *ngIf="message.attachedFile">
+                <mat-icon>attach_file</mat-icon>
+                <span class="file-name">{{ message.attachedFile.name }}</span>
+              </div>
             </div>
             <div class="message-time">
               {{ message.timestamp | date:'shortTime' }}
             </div>
           </div>
-          <mat-icon *ngIf="!message.isUserMessage" class="robot-icon">smart_toy</mat-icon>
+        </div>
+
+        <!-- Recommended questions container -->
+        <div *ngIf="recommendedQuestions.length > 0" class="recommended-questions-container">
+          <div class="recommended-questions-title">
+            <mat-icon>lightbulb</mat-icon>
+            <span>Suggested follow-ups</span>
+          </div>
+          <div class="recommended-questions">
+            <button *ngFor="let question of recommendedQuestions" 
+                    mat-stroked-button 
+                    class="recommended-question"
+                    (click)="useRecommendedQuestion(question)">
+              {{ question }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Loading indicator for recommendations -->
+        <div *ngIf="isLoadingRecommendations" class="recommended-questions-loading">
+          <mat-spinner diameter="16"></mat-spinner>
+          <span>Generating suggestions...</span>
         </div>
 
         <div *ngIf="messages.length === 0" class="empty-state">
@@ -63,11 +94,36 @@
                  [disabled]="!(selectedAgent$ | async) || isSending"
                  (keydown)="onKeyPress($event)">
         </mat-form-field>
-        <button mat-mini-fab color="primary" 
-                [disabled]="!newMessage.trim() || !(selectedAgent$ | async) || isSending"
+        <!-- File upload button -->
+        <button mat-mini-fab 
+                color="accent" 
+                class="file-upload-button"
+                [disabled]="!(selectedAgent$ | async) || isSending" 
+                (click)="fileInput.click()"
+                matTooltip="Attach file">
+          <mat-icon>attach_file</mat-icon>
+        </button>
+        <input #fileInput 
+               type="file" 
+               style="display: none;"
+               (change)="onFileSelected($event)"
+               accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg">
+        <button mat-mini-fab 
+                color="primary" 
+                [disabled]="!hasMessageContent() || !(selectedAgent$ | async) || isSending"
                 (click)="sendMessage()">
           <mat-icon>send</mat-icon>
         </button>
+      </div>
+      <!-- Display selected file before sending -->
+      <div class="selected-file-container" *ngIf="selectedFile">
+        <div class="selected-file">
+          <mat-icon>description</mat-icon>
+          <span class="file-name">{{ selectedFile.name }}</span>
+          <button mat-icon-button color="warn" (click)="removeSelectedFile()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
       </div>
     </mat-card-actions>
   </mat-card>

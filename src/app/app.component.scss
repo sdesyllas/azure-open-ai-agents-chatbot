@@ -34,6 +34,37 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow: hidden; /* Prevent scrollbars in the main content area */
-  height: calc(100vh - 64px); /* Adjust based on header height */
+  overflow: auto; /* Changed from hidden to auto to allow scrolling */
+  height: auto; /* Let it take natural height */
+}
+
+.footer {
+  background-color: #f0f0f0;
+  color: #555;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  border-top: 1px solid #ddd;
+  flex-shrink: 0; /* Prevent the footer from shrinking */
+  position: relative; /* Changed from static to relative */
+  z-index: 1; /* Ensure it's on top of any overlaps */
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.copyright {
+  font-weight: 500;
+}
+
+.responsible-ai-message {
+  font-style: italic;
+  text-align: right;
+  flex: 1;
+  padding-left: 20px;
 }

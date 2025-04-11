@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/3e73e1d5-0689-49b9-8457-300ceeb74eea/resourceGroups/devteam-learning-rg/providers/Microsoft.Web/sites/azure-experimental",
+    "appService.deploySubpath": "dist\\azure-ai-chat"
+}
