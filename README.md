@@ -35,14 +35,30 @@ This project uses the `@azure/ai-projects` SDK to connect to your Azure OpenAI p
 
 ### Configuration
 
-Before running the application, update the connection string in `src/server/config.ts` with your Azure OpenAI project connection string:
+Before running the application, update the configuration in `src/app/config/api-config.ts` with your Azure OpenAI settings:
 
 ```typescript
-export const config = {
-    aiProjects: {
-        connectionString: "your Azure OpenAI project connection string here"
-    }
+export const ApiConfig = {
+  openai: {
+    apiEndpoint: 'your openAI endpoint here',
+    apiVersion: '2025-01-01-preview',
+    apiKey: 'your openAI api key here'
+  },
+  aiProjects: {
+    connectionString: "your azure project connection string here"
+  }
 };
+```
+
+Example of a properly formatted OpenAI endpoint:
+```
+https://your-resource-name.openai.azure.com/
+```
+
+Example of a properly formatted connection string:
+
+```
+projects.azure.com/YourProjectName;instance=your-region.instances.azure.ai;apikey=your-api-key
 ```
 
 ### Development server
