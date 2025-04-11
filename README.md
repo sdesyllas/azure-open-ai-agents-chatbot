@@ -11,6 +11,7 @@ This project demonstrates how to integrate Azure OpenAI Agents into a web applic
 - Start conversations with these agents
 - Receive streaming responses in real-time
 - Maintain conversation history for each agent
+- View recommended questions based on agent context
 
 ## About Azure OpenAI Agents
 
@@ -49,7 +50,7 @@ export const config = {
 To start a local development server, run:
 
 ```bash
-ng serve
+npm start
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
@@ -71,21 +72,29 @@ This will compile your project and store the build artifacts in the `dist/` dire
 - **Thread Management**: Conversations are maintained in threads for context preservation
 - **Markdown Support**: Agent responses support markdown formatting
 - **Responsive Design**: Works on both desktop and mobile devices
+- **Recommended Questions**: Displays suggested questions based on the selected agent
+- **Chat Interface**: Modern, user-friendly chat interface with message history
 
 ## Architecture
 
 The application consists of:
 
 - **Frontend**: Angular application with Material UI components
+  - **Components**:
+    - Agent Selector: For choosing different AI agents
+    - Chat Interface: For displaying and managing conversation
 - **Backend**: Express server that mediates between the frontend and Azure OpenAI services
 - **Azure Integration**: Connection to Azure OpenAI services via the AI Projects Client
+- **Services**:
+  - AI Project Service: Handles communication with Azure OpenAI
+  - Recommended Questions Service: Manages suggested questions for agents
 
 ## Running unit tests
 
 To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
 
 ```bash
-ng test
+npm test
 ```
 
 ## Additional Resources
