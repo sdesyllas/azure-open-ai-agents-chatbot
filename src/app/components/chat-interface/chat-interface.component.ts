@@ -16,13 +16,13 @@ import { Observable, Subscription, of } from 'rxjs';
 import { Agent } from '../../models/agent.model';
 import { MarkdownPipe } from '../../pipes/markdown.pipe';
 import { ActivatedRoute } from '@angular/router';
+import { AgentSelectorComponent } from '../agent-selector/agent-selector.component';
 
 @Component({
   selector: 'app-chat-interface',
   templateUrl: './chat-interface.component.html',
   styleUrls: ['./chat-interface.component.scss'],
-  standalone: true,
-  imports: [
+  standalone: true,  imports: [
     CommonModule,
     FormsModule,
     MatCardModule,
@@ -33,7 +33,8 @@ import { ActivatedRoute } from '@angular/router';
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatChipsModule,
-    MarkdownPipe
+    MarkdownPipe,
+    AgentSelectorComponent
   ]
 })
 export class ChatInterfaceComponent implements OnInit, AfterViewChecked, OnDestroy {

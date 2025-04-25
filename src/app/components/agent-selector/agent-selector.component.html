@@ -1,13 +1,13 @@
 <div class="agent-selector-container">
   <mat-form-field appearance="outline" class="agent-select" (click)="loadAgents()">
-    <mat-label>Select AI Agent</mat-label>
+    <mat-label>agent</mat-label>
     <mat-select [(value)]="selectedAgent" (selectionChange)="onSelectAgent($event.value)">
       @if (isLoadingAgents) {
-        <mat-option [disabled]="true">Loading agents...</mat-option>
+        <mat-option [disabled]="true">Loading...</mat-option>
       } @else if (errorMessage) {
         <mat-option [disabled]="true">{{ errorMessage }}</mat-option>
       } @else if (!isAgentsLoaded) {
-        <mat-option [disabled]="true">Click to load agents</mat-option>
+        <mat-option [disabled]="true">Select agent</mat-option>
       } @else {
         @for (agent of agents$ | async; track agent.id) {
           <mat-option [value]="agent">

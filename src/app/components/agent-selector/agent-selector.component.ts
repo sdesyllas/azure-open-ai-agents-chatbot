@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { Agent } from '../../models/agent.model';
 import { AiProjectService } from '../../services/ai-project.service';
 import { Observable, Subscription, catchError, finalize, of } from 'rxjs';
@@ -14,7 +15,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './agent-selector.component.html',
   styleUrls: ['./agent-selector.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatSelectModule, MatFormFieldModule, MatCardModule, MatButtonModule]
+  imports: [CommonModule, MatSelectModule, MatFormFieldModule, MatCardModule, MatButtonModule, MatIconModule]
 })
 export class AgentSelectorComponent implements OnInit, OnDestroy {
   agents$: Observable<Agent[]> = of([]);

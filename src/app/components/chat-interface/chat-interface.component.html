@@ -103,9 +103,7 @@
           </ng-template>
         </div>
       </div>
-    </mat-card-content>
-
-    <mat-card-actions>
+    </mat-card-content>    <mat-card-actions>
       <div class="input-container">
         <mat-form-field appearance="outline" class="message-input">
           <input matInput type="text" 
@@ -113,7 +111,9 @@
                  [(ngModel)]="newMessage"
                  [disabled]="!(selectedAgent$ | async) || isSending"
                  (keydown)="onKeyPress($event)">
-        </mat-form-field>        <!-- File upload button with animation -->
+        </mat-form-field>
+        <app-agent-selector class="agent-selector-inline"></app-agent-selector>
+        <!-- File upload button with animation -->
         <button mat-mini-fab 
                 color="accent" 
                 class="file-upload-button"
@@ -134,7 +134,7 @@
                 (click)="sendMessage()">
           <mat-icon>send</mat-icon>
         </button>
-      </div>      <!-- Display selected files before sending - Copilot-like UI -->
+      </div><!-- Display selected files before sending - Copilot-like UI -->
       <div class="selected-files-container" *ngIf="selectedFiles.length > 0">
         <div class="selected-files-row">
           <div class="selected-file-box" *ngFor="let file of selectedFiles; let i = index">
@@ -150,7 +150,7 @@
         <div class="file-count-row" *ngIf="selectedFiles.length > 0">
           <span>{{ selectedFiles.length }} / {{ maxFiles }} files selected</span>
           <button mat-button color="warn" class="remove-all-button" (click)="removeSelectedFiles()">
-            <mat-icon>delete</mat-icon> Remove All
+            <mat-icon>delete</mat-icon>
           </button>
         </div>
       </div>
