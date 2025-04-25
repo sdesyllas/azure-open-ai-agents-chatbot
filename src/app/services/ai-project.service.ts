@@ -62,7 +62,6 @@ export class AiProjectService {
     
     this.selectedAgentSubject.next(agent);
   }
-
   // Send a message with multiple attached files to the selected agent
   sendMessageWithFiles(content: string, files: File[]): Observable<ChatMessage> {
     const selectedAgent = this.selectedAgentSubject.value;
@@ -80,12 +79,12 @@ export class AiProjectService {
       timestamp: new Date(),
       isUserMessage: true,
       status: 'sent',
-      // Only attach the first file to display in the UI
-      attachedFile: files.length > 0 ? {
-        name: `${files.length} files: ${files[0].name}${files.length > 1 ? ', ...' : ''}`,
-        type: files[0].type,
-        content: files[0]
-      } : undefined
+      // Attach all files as separate file attachments
+      attachedFiles: files.map(file => ({
+        name: file.name,
+        type: file.type,
+        content: file
+      }))
     };
     
     const currentMessages = this.messagesSubject.value;

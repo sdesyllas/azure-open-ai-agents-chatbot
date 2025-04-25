@@ -25,8 +25,7 @@
           <div *ngIf="!message.isUserMessage" class="robot-icon-container">
             <mat-icon class="robot-icon">adb</mat-icon>
           </div>
-          
-          <div class="message"
+            <div class="message"
                [ngClass]="{
                  'user-message': message.isUserMessage,
                  'bot-message': !message.isUserMessage,
@@ -40,10 +39,31 @@
               <div *ngIf="message.status === 'sending'" class="loading-indicator">
                 <mat-spinner diameter="20"></mat-spinner>
               </div>
-              <!-- Display file attachment if present -->
-              <div class="file-attachment" *ngIf="message.attachedFile">
-                <mat-icon>attach_file</mat-icon>
-                <span class="file-name">{{ message.attachedFile.name }}</span>
+              
+              <!-- Display multiple file attachments as boxes if present -->
+              <div class="file-attachments-container" *ngIf="message.attachedFiles && message.attachedFiles.length > 0">
+                <div class="file-box" *ngFor="let file of message.attachedFiles">
+                  <div class="file-icon">
+                    <mat-icon>{{ getFileIcon(file.type) }}</mat-icon>
+                  </div>
+                  <div class="file-details">
+                    <div class="file-name">{{ file.name }}</div>
+                    <div class="file-type">{{ formatFileType(file.type) }}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Legacy support for single file attachment (for backward compatibility) -->
+              <div class="file-attachments-container" *ngIf="message.attachedFile && !message.attachedFiles">
+                <div class="file-box">
+                  <div class="file-icon">
+                    <mat-icon>{{ getFileIcon(message.attachedFile.type) }}</mat-icon>
+                  </div>
+                  <div class="file-details">
+                    <div class="file-name">{{ message.attachedFile.name }}</div>
+                    <div class="file-type">{{ formatFileType(message.attachedFile.type) }}</div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="message-time">
@@ -93,16 +113,16 @@
                  [(ngModel)]="newMessage"
                  [disabled]="!(selectedAgent$ | async) || isSending"
                  (keydown)="onKeyPress($event)">
-        </mat-form-field>
-        <!-- File upload button -->
+        </mat-form-field>        <!-- File upload button with animation -->
         <button mat-mini-fab 
                 color="accent" 
                 class="file-upload-button"
                 [disabled]="!(selectedAgent$ | async) || isSending" 
-                (click)="fileInput.click()"
-                matTooltip="Attach file">
+                (click)="animateFileUploadButton(); fileInput.click()"
+                matTooltip="Attach file"
+                #fileUploadButton>
           <mat-icon>attach_file</mat-icon>
-        </button>        <input #fileInput 
+        </button><input #fileInput 
                type="file" 
                style="display: none;"
                (change)="onFileSelected($event)"
@@ -114,19 +134,22 @@
                 (click)="sendMessage()">
           <mat-icon>send</mat-icon>
         </button>
-      </div>
-      <!-- Display selected files before sending -->
+      </div>      <!-- Display selected files before sending - Copilot-like UI -->
       <div class="selected-files-container" *ngIf="selectedFiles.length > 0">
-        <div class="selected-file" *ngFor="let file of selectedFiles; let i = index">
-          <mat-icon>description</mat-icon>
-          <span class="file-name">{{ file.name }}</span>
-          <button mat-icon-button color="warn" (click)="removeSelectedFile(i)">
-            <mat-icon>close</mat-icon>
-          </button>
+        <div class="selected-files-row">
+          <div class="selected-file-box" *ngFor="let file of selectedFiles; let i = index">
+            <div class="file-box-content">
+              <mat-icon>{{ getFileIcon(file.type) }}</mat-icon>
+              <span class="file-name">{{ file.name }}</span>
+            </div>
+            <button mat-icon-button class="remove-file-button" (click)="removeSelectedFile(i)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
         </div>
-        <div class="file-count" *ngIf="selectedFiles.length > 0">
-          {{ selectedFiles.length }} / {{ maxFiles }} files selected
-          <button mat-button color="warn" (click)="removeSelectedFiles()">
+        <div class="file-count-row" *ngIf="selectedFiles.length > 0">
+          <span>{{ selectedFiles.length }} / {{ maxFiles }} files selected</span>
+          <button mat-button color="warn" class="remove-all-button" (click)="removeSelectedFiles()">
             <mat-icon>delete</mat-icon> Remove All
           </button>
         </div>

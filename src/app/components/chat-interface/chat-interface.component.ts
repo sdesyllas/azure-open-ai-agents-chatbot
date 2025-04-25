@@ -53,6 +53,8 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked, OnDestr
   
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
   @ViewChild('fileInput') private fileInput!: ElementRef;
+  // Reference to the file upload button for animation
+  @ViewChild('fileUploadButton', { static: false }) fileUploadButton!: ElementRef;
 
   constructor(
     private aiProjectService: AiProjectService,
@@ -200,8 +202,7 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked, OnDestr
       event.preventDefault();
       this.sendMessage();
     }
-  }
-  // Handle file selection
+  }  // Handle file selection
   onFileSelected(event: Event): void {
     const element = event.target as HTMLInputElement;
     if (element.files && element.files.length) {
@@ -218,24 +219,97 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked, OnDestr
         return;
       }
       
-      // Add the files to our array
-      this.selectedFiles.push(...additionalFiles);
+      // Add the files to our array with a slight delay between each to create animation effect
+      additionalFiles.forEach((file, index) => {
+        setTimeout(() => {
+          this.selectedFiles.push(file);
+          // Update the UI when the last file is added
+          if (index === additionalFiles.length - 1) {
+            // Force change detection if needed
+            this.scrollToBottom();
+          }
+        }, index * 50); // 50ms delay between each file for a nice visual effect
+      });
+      
       console.log(`${additionalFiles.length} file(s) selected. Total files: ${this.selectedFiles.length}`);
     }
   }
-
   // Remove selected files
   removeSelectedFiles(): void {
-    this.selectedFiles = [];
-    if (this.fileInput && this.fileInput.nativeElement) {
-      this.fileInput.nativeElement.value = '';
-    }
+    if (this.selectedFiles.length === 0) return;
+    
+    // Apply a fadeout class first
+    const selectedFilesElements = document.querySelectorAll('.selected-file-box');
+    selectedFilesElements.forEach(el => {
+      (el as HTMLElement).style.opacity = '0';
+      (el as HTMLElement).style.transform = 'translateY(10px)';
+    });
+    
+    // Then remove the files after the animation
+    setTimeout(() => {
+      this.selectedFiles = [];
+      if (this.fileInput && this.fileInput.nativeElement) {
+        this.fileInput.nativeElement.value = '';
+      }
+    }, 200);
   }
   
   // Remove a specific file by index
   removeSelectedFile(index: number): void {
     if (index >= 0 && index < this.selectedFiles.length) {
-      this.selectedFiles.splice(index, 1);
+      // Find the element to fade out
+      const fileElements = document.querySelectorAll('.selected-file-box');
+      if (fileElements[index]) {
+        (fileElements[index] as HTMLElement).style.opacity = '0';
+        (fileElements[index] as HTMLElement).style.transform = 'translateY(10px)';
+      }
+      
+      // Remove the file after a short delay for the animation
+      setTimeout(() => {
+        this.selectedFiles.splice(index, 1);
+      }, 150);
+    }
+  }
+
+  // Get appropriate icon for file type
+  getFileIcon(fileType: string): string {
+    if (fileType.includes('pdf')) {
+      return 'picture_as_pdf';
+    } else if (fileType.includes('image') || fileType.includes('png') || fileType.includes('jpg') || fileType.includes('jpeg')) {
+      return 'image';
+    } else if (fileType.includes('word') || fileType.includes('doc')) {
+      return 'description';
+    } else if (fileType.includes('excel') || fileType.includes('spreadsheet') || fileType.includes('xls')) {
+      return 'table_chart';
+    } else if (fileType.includes('powerpoint') || fileType.includes('presentation') || fileType.includes('ppt')) {
+      return 'slideshow';
+    } else if (fileType.includes('text') || fileType.includes('txt')) {
+      return 'article';
+    } else {
+      return 'insert_drive_file';
+    }
+  }
+  
+  // Format file type for display
+  formatFileType(fileType: string): string {
+    if (!fileType) return 'Unknown';
+    
+    const simplifiedType = fileType.split('/').pop() || fileType;
+    return simplifiedType.toUpperCase();
+  }
+
+  // Animate the file upload button when clicked
+  animateFileUploadButton(): void {
+    if (this.fileUploadButton && this.fileUploadButton.nativeElement) {
+      const button = this.fileUploadButton.nativeElement;
+      
+      // Add a pulse animation class
+      button.classList.add('pulse-animation');
+      
+      // Remove the class after animation completes
+      setTimeout(() => {
+        button.classList.remove('pulse-animation');
+      }, 300);
     }
   }
 }
