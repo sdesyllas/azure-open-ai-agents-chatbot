@@ -102,12 +102,12 @@
                 (click)="fileInput.click()"
                 matTooltip="Attach file">
           <mat-icon>attach_file</mat-icon>
-        </button>
-        <input #fileInput 
+        </button>        <input #fileInput 
                type="file" 
                style="display: none;"
                (change)="onFileSelected($event)"
-               accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg">
+               accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"
+               multiple>
         <button mat-mini-fab 
                 color="primary" 
                 [disabled]="!hasMessageContent() || !(selectedAgent$ | async) || isSending"
@@ -115,13 +115,19 @@
           <mat-icon>send</mat-icon>
         </button>
       </div>
-      <!-- Display selected file before sending -->
-      <div class="selected-file-container" *ngIf="selectedFile">
-        <div class="selected-file">
+      <!-- Display selected files before sending -->
+      <div class="selected-files-container" *ngIf="selectedFiles.length > 0">
+        <div class="selected-file" *ngFor="let file of selectedFiles; let i = index">
           <mat-icon>description</mat-icon>
-          <span class="file-name">{{ selectedFile.name }}</span>
-          <button mat-icon-button color="warn" (click)="removeSelectedFile()">
+          <span class="file-name">{{ file.name }}</span>
+          <button mat-icon-button color="warn" (click)="removeSelectedFile(i)">
             <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="file-count" *ngIf="selectedFiles.length > 0">
+          {{ selectedFiles.length }} / {{ maxFiles }} files selected
+          <button mat-button color="warn" (click)="removeSelectedFiles()">
+            <mat-icon>delete</mat-icon> Remove All
           </button>
         </div>
       </div>

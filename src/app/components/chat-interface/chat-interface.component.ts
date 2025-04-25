@@ -41,7 +41,8 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked, OnDestr
   newMessage = '';
   selectedAgent$: Observable<Agent | null> = of(null);
   isSending = false;
-  selectedFile: File | null = null;
+  selectedFiles: File[] = [];
+  maxFiles: number = 5;
   recommendedQuestions: string[] = [];
   isLoadingRecommendations = false;
   
@@ -121,34 +122,31 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked, OnDestr
     // Clean up subscriptions
     this.subscription.unsubscribe();
   }
-
-  // Helper method to check if there's message content
+  // Helper method to check if there's message content or files
   hasMessageContent(): boolean {
-    return this.newMessage.trim().length > 0;
+    return this.newMessage.trim().length > 0 || this.selectedFiles.length > 0;
   }
 
   scrollToBottom(): void {
     try {
       this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
     } catch (err) { }
-  }
-
-  sendMessage(content: string = this.newMessage): void {
+  }  sendMessage(content: string = this.newMessage): void {
     const message = content.trim();
-    if (!message && !this.selectedFile) return;
+    if (!message && this.selectedFiles.length === 0) return;
     
     // Clear recommended questions when sending a new message
     this.recommendedQuestions = [];
     
-    if (this.selectedFile) {
-      this.aiProjectService.sendMessageWithFile(message, this.selectedFile).subscribe({
+    if (this.selectedFiles.length > 0) {
+      this.aiProjectService.sendMessageWithFiles(message, this.selectedFiles).subscribe({
         next: () => {
           this.newMessage = '';
-          this.removeSelectedFile();
+          this.removeSelectedFiles();
           this.scrollToBottom();
         },
-        error: (err) => {
-          console.error('Error sending message with file:', err);
+        error: (error: Error) => {
+          console.error('Error sending message with files:', error);
         }
       });
     } else {
@@ -157,8 +155,8 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked, OnDestr
           this.newMessage = '';
           this.scrollToBottom();
         },
-        error: (err) => {
-          console.error('Error sending message:', err);
+        error: (error: Error) => {
+          console.error('Error sending message:', error);
         }
       });
     }
@@ -203,21 +201,41 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked, OnDestr
       this.sendMessage();
     }
   }
-
   // Handle file selection
   onFileSelected(event: Event): void {
     const element = event.target as HTMLInputElement;
     if (element.files && element.files.length) {
-      this.selectedFile = element.files[0];
-      console.log('File selected:', this.selectedFile.name);
+      // Check if adding these files would exceed the max file limit
+      const additionalFiles = Array.from(element.files);
+      const totalFiles = this.selectedFiles.length + additionalFiles.length;
+      
+      if (totalFiles > this.maxFiles) {
+        console.log(`Cannot select more than ${this.maxFiles} files.`);
+        // Reset the file input since we couldn't accept all files
+        if (this.fileInput && this.fileInput.nativeElement) {
+          this.fileInput.nativeElement.value = '';
+        }
+        return;
+      }
+      
+      // Add the files to our array
+      this.selectedFiles.push(...additionalFiles);
+      console.log(`${additionalFiles.length} file(s) selected. Total files: ${this.selectedFiles.length}`);
     }
   }
 
-  // Remove selected file
-  removeSelectedFile(): void {
-    this.selectedFile = null;
+  // Remove selected files
+  removeSelectedFiles(): void {
+    this.selectedFiles = [];
     if (this.fileInput && this.fileInput.nativeElement) {
       this.fileInput.nativeElement.value = '';
+    }
+  }
+  
+  // Remove a specific file by index
+  removeSelectedFile(index: number): void {
+    if (index >= 0 && index < this.selectedFiles.length) {
+      this.selectedFiles.splice(index, 1);
     }
   }
 }

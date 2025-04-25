@@ -11,4 +11,5 @@ export interface ChatMessage {
   isUserMessage: boolean;
   status: 'sending' | 'sent' | 'error';
   attachedFile?: FileAttachment; // Optional file attachment
+  attachedFiles?: FileAttachment[]; // Optional multiple file attachments
 }

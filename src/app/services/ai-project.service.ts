@@ -63,28 +63,29 @@ export class AiProjectService {
     this.selectedAgentSubject.next(agent);
   }
 
-  // Send a message with an attached file to the selected agent
-  sendMessageWithFile(content: string, file: File): Observable<ChatMessage> {
+  // Send a message with multiple attached files to the selected agent
+  sendMessageWithFiles(content: string, files: File[]): Observable<ChatMessage> {
     const selectedAgent = this.selectedAgentSubject.value;
     if (!selectedAgent) {
       return throwError(() => new Error('No agent selected'));
     }
-
-    // Create file attachment object
-    const fileAttachment: FileAttachment = {
-      name: file.name,
-      type: file.type,
-      content: file
-    };
+    console.log(`Sending message with files to agent: ${selectedAgent.name}`);
+    // Create content text that includes the file names if no message content
+    const displayContent = content.trim() ? content : `[Files: ${files.map(f => f.name).join(', ')}]`;
 
     // Add user message with file attachment to the messages array
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
-      content: content.trim() ? content : `[File: ${file.name}]`,
+      content: displayContent,
       timestamp: new Date(),
       isUserMessage: true,
       status: 'sent',
-      attachedFile: fileAttachment
+      // Only attach the first file to display in the UI
+      attachedFile: files.length > 0 ? {
+        name: `${files.length} files: ${files[0].name}${files.length > 1 ? ', ...' : ''}`,
+        type: files[0].type,
+        content: files[0]
+      } : undefined
     };
     
     const currentMessages = this.messagesSubject.value;
@@ -102,11 +103,16 @@ export class AiProjectService {
     // Add the placeholder to messages
     this.messagesSubject.next([...this.messagesSubject.value, botResponsePlaceholder]);
     
-    // Create form data to send the file
+    // Create form data to send the files
     const formData = new FormData();
-    formData.append('file', file);
+    // Append each file with the same field name 'files'
+    files.forEach((file, index) => {
+      formData.append('files', file);
+    });
+    
     formData.append('agentId', selectedAgent.id);
     formData.append('message', content);
+    formData.append('fileCount', files.length.toString());
     
     if (this.currentThreadId) {
       formData.append('threadId', this.currentThreadId);
@@ -119,7 +125,7 @@ export class AiProjectService {
     // Create an observable that will handle the SSE connection
     return new Observable<ChatMessage>(observer => {
       // Use fetch API for SSE with FormData
-      fetch(`${this.getFullApiUrl()}/chat-with-file`, {
+      fetch(`${this.getFullApiUrl()}/chat-with-files`, {
         method: 'POST',
         body: formData,
         headers: {
@@ -279,7 +285,7 @@ export class AiProjectService {
     if (!selectedAgent) {
       return throwError(() => new Error('No agent selected'));
     }
-
+    console.log(`Sending message to agent: ${selectedAgent.name}`);
     // Add user message to the messages array
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
