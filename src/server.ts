@@ -41,11 +41,6 @@ app.post('/api/chat', (req, res) => {
   aiController.handleChat(req, res);
 });
 
-// Chat with file upload endpoint
-app.post('/api/chat-with-file', upload.single('file'), (req, res) => {
-  aiController.handleChatWithFile(req, res);
-});
-
 // Chat with multiple file uploads endpoint
 app.post('/api/chat-with-files', upload.array('files', 5), (req, res) => {
   aiController.handleChatWithFiles(req, res);
